@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hitch</title>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<td><input type="text" name="" class="x" placeholder="Enter x1"></td>
+			<td><input type="text" name="" class="y" placeholder="Enter y1"></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="" class="x" placeholder="Enter x2"></td>
+			<td><input type="text" name="" class="y" placeholder="Enter y2"></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="" class="x" placeholder="Enter x3"></td>
+			<td><input type="text" name="" class="y" placeholder="Enter y3"></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="" class="x" placeholder="Enter x4"></td>
+			<td><input type="text" name="" class="y" placeholder="Enter y4"></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="" class="x" placeholder="Enter x5"></td>
+			<td><input type="text" name="" class="y" placeholder="Enter y5"></td>
+		</tr>
+		<tr>
+			<td><input type="text" name="" class="x" placeholder="Enter x6"></td>
+			<td><input type="text" name="" class="y" placeholder="Enter y6"></td>
+		</tr>
+	</table>
+	<p></p>
+	<button id="train">Train</button>
+	<p>Enter x who's y you want to predict</p>
+	<input type="text" name="" placeholder="Enter x" id="test_value">
+	<p></p>
+	<button id="predict">Predict</button>
+</body>
+</html>
+<script type="text/javascript">
+		var x = document.getElementsByClassName("x"); 
+		var y = document.getElementsByClassName("y");
+		var text_content_x = new Array();
+		var text_content_y = new Array();
+		var train = document.getElementById("train");
+		var predict = document.getElementById("predict");
+		var test_value = document.getElementById("test_value");
+
+		for(var i = 0; i< 6; ++i){
+			if(x[i]){
+				x[i].addEventListener("keypress", function(){
+				if(event.which == 13){
+					text_content_x[i] = this.value;
+					//console.log(text_content_x[i]);
+				}
+			});
+			}
+			if(y[i]){
+				y[i].addEventListener("keypress", function(){
+				if(event.which == 13){
+					text_content_y[i] = this.value;
+					//console.log(text_content_y[i]);
+				}
+			});
+			}
+		}
+		train.addEventListener("click", function(){
+			// create training function here
+		});
+		predict.addEventListener("click", function(){
+			test_value = test_value.value; //to store the value of x who's y we want to predict 
+			// console.log(test_value);
+
+
+			// create prediction function here
+		});
+	</script>
