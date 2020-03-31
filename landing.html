@@ -3,6 +3,24 @@
 <head>
 	<title>Hitch</title>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script lang="js">
+	let xs;
+	let	ys;
+        async function doTraining(model){
+            const history = await model.fit(xs, ys, {epochs: 500, callbacks: {onEpochEnd: async(epoch, logs) => {
+                console.log("Epochs:" + epoch + "Loss:" + logs.loss);
+            }
+            }});
+        }
+
+        const model = tf.sequential();
+        model.add(tf.layers.dense({units: 1, inputShape: [1]}));
+        model.compile({loss:'meanSquaredError',
+                      optimizer:'sgd'});
+        model.summary();
+    </script>
+
 <body>
 	<table border="1">
 		<tr>
@@ -39,38 +57,22 @@
 </body>
 </html>
 <script type="text/javascript">
-		var x = document.getElementsByClassName("x"); 
-		var y = document.getElementsByClassName("y");
-		var text_content_x = new Array();
-		var text_content_y = new Array();
 		var train = document.getElementById("train");
 		var predict = document.getElementById("predict");
 		var test_value = document.getElementById("test_value");
 
-		for(var i = 0; i< 6; ++i){
-			if(x[i]){
-				x[i].addEventListener("keypress", function(){
-				if(event.which == 13){
-					text_content_x[i] = this.value;
-					//console.log(text_content_x[i]);
-				}
-			});
-			}
-			if(y[i]){
-				y[i].addEventListener("keypress", function(){
-				if(event.which == 13){
-					text_content_y[i] = this.value;
-					//console.log(text_content_y[i]);
-				}
-			});
-			}
-		}
-		train.addEventListener("click", function(){
+		train.addEventListener("click", async function() {
+			var x = await document.getElementsByClassName("x"); 
+			var y = await document.getElementsByClassName("y");
 			// create training function here
-		});
-		predict.addEventListener("click", function(){
+xs = await tf.tensor2d([parseFloat(x[0].value), parseFloat(x[1].value), parseFloat(x[2].value), parseFloat(x[3].value), parseFloat(x[4].value), parseFloat(x[5].value)],[6, 1]);
+ys = await tf.tensor2d([parseFloat(y[0].value), parseFloat(y[1].value), parseFloat(y[2].value), parseFloat(y[3].value), parseFloat(y[4].value), parseFloat(y[5].value)],[6, 1]);
+doTraining(model);
+        			});
+		predict.addEventListener("click", async function(){
 			test_value = test_value.value; //to store the value of x who's y we want to predict 
-			// console.log(test_value);
+			console.log(test_value);
+			alert(model.predict(tf.tensor2d([parseFloat(test_value)], [1, 1])));
 
 
 			// create prediction function here
