@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Hitch</title>
+	<title>Y Predictor</title>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 <script lang="js">
 	let xs;
 	let	ys;
-        async function doTraining(model){
-            const history = await model.fit(xs, ys, {epochs: 500, callbacks: {onEpochEnd: async(epoch, logs) => {
-                console.log("Epochs:" + epoch + "Loss:" + logs.loss);
+        async function doTraining(){
+            const history = await model.fit(xs, ys, {
+            	epochs: 500, callbacks: {
+            		onEpochEnd: async(epoch, logs) => {
+            			console.log("Epochs:" + epoch + "Loss:" + logs.loss);
+            		}
+            	}
             }
-            }});
+            );
+            alert("Training is Complete. You can now predict Y");
         }
-
         const model = tf.sequential();
         model.add(tf.layers.dense({units: 1, inputShape: [1]}));
-        model.compile({loss:'meanSquaredError',
-                      optimizer:'sgd'});
-        model.summary();
+        model.compile({loss:'meanSquaredError', optimizer: 'adam'});
     </script>
 
 <body>
+	<h1>Basic Machine Learning Model</h1>
+	<h3>What this does?</h3>
+	<h5>
+		This application will take as input 6 x values and 6 y values from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
+		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
+	</h5>
+
+	<h3>
+		Enter the values: Please try to provide as much variety as you can...
+	</h3>
+
+	<h5>
+		Please dont't leave any cell in the table blank and go to the prediction once a "Training is Complete" message pops up.
+	</h5>
+	This will only be able to predict linear relations.<br>
+	The answer will never be accurate. it will always be very close to the real answer.<br>
 	<table border="1">
 		<tr>
 			<td><input type="text" name="" class="x" placeholder="Enter x1"></td>
@@ -50,16 +68,17 @@
 	</table>
 	<p></p>
 	<button id="train">Train</button>
-	<p>Enter x who's y you want to predict</p>
+	<p>Enter x who's y you want to predict.</p>
 	<input type="text" name="" placeholder="Enter x" id="test_value">
 	<p></p>
 	<button id="predict">Predict</button>
+	<h6>Open the console in the inspect page if you want to see the training process...</h6>
+	<h5>Made By Franciscan Lads.</h5>
 </body>
 </html>
 <script type="text/javascript">
 		var train = document.getElementById("train");
 		var predict = document.getElementById("predict");
-		var test_value = document.getElementById("test_value");
 
 		train.addEventListener("click", async function() {
 			var x = await document.getElementsByClassName("x"); 
@@ -67,12 +86,14 @@
 			// create training function here
 xs = await tf.tensor2d([parseFloat(x[0].value), parseFloat(x[1].value), parseFloat(x[2].value), parseFloat(x[3].value), parseFloat(x[4].value), parseFloat(x[5].value)],[6, 1]);
 ys = await tf.tensor2d([parseFloat(y[0].value), parseFloat(y[1].value), parseFloat(y[2].value), parseFloat(y[3].value), parseFloat(y[4].value), parseFloat(y[5].value)],[6, 1]);
-doTraining(model);
+doTraining();
         			});
 		predict.addEventListener("click", async function(){
+			var test_value = document.getElementById("test_value");
 			test_value = test_value.value; //to store the value of x who's y we want to predict 
+			var a = model.predict(tf.tensor2d([parseFloat(test_value)], [1, 1]));
 			console.log(test_value);
-			alert(model.predict(tf.tensor2d([parseFloat(test_value)], [1, 1])));
+			alert(a.dataSync());
 
 
 			// create prediction function here
