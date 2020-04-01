@@ -2,11 +2,14 @@
 <html>
 <head>
 	<title>Y Predictor</title>
+<style>
+	h1 {text-align: center;}
+</style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 <script lang="js">
 	let xs;
-	let	ys;
+	let ys;
         async function doTraining(){
             const history = await model.fit(xs, ys, {
             	epochs: 500, callbacks: {
@@ -73,10 +76,10 @@
 	<p></p>
 	<button id="predict">Predict</button>
 	<h6>Open the console in the inspect page if you want to see the training process...</h6>
-	<h5>Made By Franciscan Lads.</h5>
+	<h5><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h5>
 </body>
 </html>
-<script type="text/javascript">
+<script>
 		var train = document.getElementById("train");
 		var predict = document.getElementById("predict");
 
