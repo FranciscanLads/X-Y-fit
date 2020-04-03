@@ -2,8 +2,17 @@
 <html>
 <head>
 	<title>Y Predictor</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700" rel="stylesheet">
 <style>
-	h1 {text-align: center;}
+	.jumbotron {
+  		background: #ffd89b;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to left, #19547b, #ffd89b);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to left, #19547b, #ffd89b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		font-family: "Nunito", sans-serif;
+		
+	}
+
 </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
@@ -27,56 +36,76 @@
     </script>
 
 <body>
-	<h1>Basic Machine Learning Model</h1>
-	<h3>What does it do?</h3>
-	<p>
+	<div class="container-fluid p-0">
+			<div class="jumbotron mt-0">
+				<h1 id="head">Basic Machine <br> Learning Model</h1>
+			</div>
+	</div>
+	<section class="container-fluid">
+		<h3>What does it do?</h3>
+		<p>
 		Considering an equation, this application will take input 6 x values(independant variable) and 6 y values(dependant variable) from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
 		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
-	</p>
+		</p>
 
-	<h3>
+		<h3>
 		Enter the values: Please try to provide as much variety as you can...
-	</h3>
+		</h3>
 
-	<h5>
+		<h5>
 		Please dont't leave any cell in the table blank and go to the prediction once a <strong>"Training is Complete"</strong> message pops up.
-	</h5>
-	This will only be able to predict linear relations.<br>
-	The answer will never be accurate,but close to the real answer.<br>
-	<table border="1">
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x1"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y1"></td>
+		</h5>
+		This will only be able to predict linear relations.<br>
+		The answer will never be accurate,but close to the real answer.<br>
+		<p>
+		Considering an equation, this application will take input 6 x values(independant variable) and 6 y values(dependant variable) from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
+		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
+		</p>
+
+		<h5>
+		Please dont't leave any cell in the table blank and go to the prediction once a <strong>"Training is Complete"</strong> message pops up.
+		</h5>
+		This will only be able to predict linear relations.<br>
+		The answer will never be accurate,but close to the real answer.<br>
+	</section>
+	
+	<section class="container-fluid">
+		<table border="1">
+			<tr>
+				<td><input type="text" name="" class="x" placeholder="Enter x1"></td>
+				<td><input type="text" name="" class="y" placeholder="Enter y1"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="" class="x" placeholder="Enter x2"></td>
+				<td><input type="text" name="" class="y" placeholder="Enter y2"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="" class="x" placeholder="Enter x3"></td>
+				<td><input type="text" name="" class="y" placeholder="Enter y3"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="" class="x" placeholder="Enter x4"></td>
+				<td><input type="text" name="" class="y" placeholder="Enter y4"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="" class="x" placeholder="Enter x5"></td>
+				<td><input type="text" name="" class="y" placeholder="Enter y5"></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="" class="x" placeholder="Enter x6"></td>
+				<td><input type="text" name="" class="y" placeholder="Enter y6"></td>
 		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x2"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y2"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x3"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y3"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x4"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y4"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x5"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y5"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x6"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y6"></td>
-		</tr>
-	</table>
-	<p></p>
-	<button id="train">Train</button>
-	<p>Enter x who's y you want to predict.</p>
-	<input type="text" name="" placeholder="Enter x" id="test_value">
-	<p></p>
-	<button id="predict">Predict</button>
-	<h5>Open the console(pressing F12 and clicking the console tab) in the inspect page if you want to see the training process...</h5>
-	<h4><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h4>
+		</table>
+		<p></p>
+		<button id="train">Train</button>
+		<p>Enter x who's y you want to predict.</p>
+		<input type="text" name="" placeholder="Enter x" id="test_value">
+		<p></p>
+		<button id="predict">Predict</button>
+		<h5>Open the console(pressing F12 and clicking the console tab) in the inspect page if you want to see the training process...</h5>
+		<h4><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h4>
+	</section>
+	
 </body>
 </html>
 <script>
