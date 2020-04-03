@@ -51,27 +51,6 @@
 </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-<script lang="js">
-	let xs;
-	let ys;
-        async function doTraining(){
-            const history = await model.fit(xs, ys, {
-            	epochs: 500, callbacks: {
-            		onEpochEnd: async(epoch, logs) => {
-            			console.log("Epochs:" + epoch + "Loss:" + logs.loss);
-				document.getElementById("progress").innerHTML = epoch+"/499";
-            		}
-            	}
-            }
-            );
-            alert("Training is Complete. You can now predict Y");
-        }
-        const model = tf.sequential();
-        model.add(tf.layers.dense({units: 15, inputShape: [1]}));
-        model.add(tf.layers.dense({units: 10}));
-        model.add(tf.layers.dense({units: 1,activation: 'linear'}));
-        model.compile({loss:'meanSquaredError', optimizer: 'sgd'});
-    </script>
 
 <body>
 	<div class="container-fluid p-0">
@@ -99,6 +78,8 @@
 		Considering an equation, this application will take input 6 x values(independant variable) and 6 y values(dependant variable) from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
 		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
 		</p>
+
+		<h6>IF NAN IS RETURNED, OUR MODEL WAS NOT ABLE TO TRAIN CORRECTLY TO YOUR VALUES</h6>
 	</section>
 	
 	<section class="container-fluid">
@@ -133,10 +114,53 @@
 		</tr>
 		</table>
 		<p></p>
+		THE ENTRY YOU LEAVE BLANK THE DEFAULT ONES WILL BE USED.
+		<br>
+		DEFAULTS ARE --> Optimizer: SGD Loss: meanSquaredError Epochs: 500 Layer 1: 1 Neuron Layer 2: 1 Neuron Learning Rate: 0.001
+		<p>
+			LAYER 1 : <input type="text" id="layer1" placeholder=" Default">
+			LAYER 2 : <input type="text" id="layer2" placeholder=" Default">
+		</p>
+		<p id="sep">
+			<input type="text" id="epoch" placeholder=" Epochs">
+			<br>
+
+			Loss Function     -------
+
+			<select id="losses">
+				<option value="0">meanSquaredError</option>
+  				<option value="1">absoluteDifference</option>
+                <option value="2">computeWeightedLoss</option>
+                <option value="3">cosineDistance</option>
+                <option value="4">hingeLoss</option>
+                <option value="5">huberLoss </option>
+                <option value="6">logLoss</option>
+			</select>
+			<br>
+
+			Optimizer ------
+
+
+
+			<select id="optimizers">
+  				<option value="0">SGD</option>
+                <option value="1">Momentum</option>
+                <option value="2">Adagrad</option>
+                <option value="3">Adadelta</option>
+                <option value="4">Adam</option>
+                <option value="5">adamax</option>
+                <option value="6">RMSProp</option>
+			</select>
+			
+			<br>
+			<input type="text" id="lr" placeholder="Learning Rate">
+		</p>
 		<button id="train" class="btn btn-light">Train</button>
 		<p></p>
 		<div id="progress"></div>
 		<p></p>
+		<label for="train_progress">Training progress:</label>
+		<progress id="train_progress" value="" max=""></progress>
 		<h5>Enter x who's y you want to predict:</h5>
 		<input type="text" name="" placeholder="Enter x" id="test_value">
 		<p></p>
@@ -145,26 +169,134 @@
 		<h5>Open the console(pressing F12 and clicking the console tab) in the inspect page if you want to see the training process...</h5>
 		<h4><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h4>
 	</section>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 </body>	
 </html>
 <script>
-		var train = document.getElementById("train");
-		var predict = document.getElementById("predict");
 
-		train.addEventListener("click", async function() {
-			var x = await document.getElementsByClassName("x"); 
-			var y = await document.getElementsByClassName("y");
-			// create training function here
-		xs = await tf.tensor2d([parseFloat(x[0].value), parseFloat(x[1].value), parseFloat(x[2].value), parseFloat(x[3].value), parseFloat(x[4].value), parseFloat(x[5].value)],[6, 1]);
-		ys = await tf.tensor2d([parseFloat(y[0].value), parseFloat(y[1].value), parseFloat(y[2].value), parseFloat(y[3].value), parseFloat(y[4].value), parseFloat(y[5].value)],[6, 1]);
-		doTraining();
+ const model = tf.sequential();
+
+	//FUNCTION FOR TRAINING
+
+        async function doTraining(EPOCHS, XS, YS){
+        	document.getElementById("train_progress").max = EPOCHS;
+            const history = await model.fit(XS, YS, {
+            	epochs: EPOCHS, callbacks: {
+            		onEpochEnd: async(epoch, logs) => {
+            			console.log("Epochs:" + epoch + "Loss: " + logs.loss + ' Accuracy: ', parseFloat(logs.acc));
+				document.getElementById("progress").innerHTML = (epoch+1)+" / "+EPOCHS;
+				document.getElementById("train_progress").value = epoch+1;
+
+            		}
+            	}
+            }
+            );
+            alert("Training is Complete. You can now predict Y");
+            firstRun = false;
+        }
+
+
+
+    //FUNCTION FOR INITIALIZING MODEL
+
+
+
+        async function initializeModel(LAYER1NEURON, LAYER2NEURON, LOSS, OPTIMIZER){
+        model.add(tf.layers.dense({units: LAYER1NEURON, inputShape: [1]}));
+        model.add(tf.layers.dense({units: LAYER2NEURON}));
+        model.add(tf.layers.dense({units: 1}));
+        model.compile({loss: LOSS, optimizer: OPTIMIZER,  metrics: 'accuracy'});
+    }
+
+
+var train = document.getElementById("train");
+var predict = document.getElementById("predict");
+var flag = true;
+var firstRun = true;
+
+train.addEventListener("click", async function() {
+
+	//GETTING USERS INPUTS
+
+	var x = await document.getElementsByClassName("x"); 
+	var y = await document.getElementsByClassName("y");
+	var layer_1_neuron =parseInt(document.getElementById("layer1").value);
+	var layer_2_neuron =parseInt(document.getElementById("layer2").value);
+	var no_of_epochs = parseInt(document.getElementById("epoch").value);
+	var learning_rate = parseInt(document.getElementById("lr").value);
+	var loss_function = parseInt(document.querySelector('#losses').value);
+	var optimizer_select = parseInt(document.querySelector('#optimizers').value);
+
+	//CHECKING THE INPUTS AND SETTING DEFAULTS
+
+
+	for(var i = 0; i<6; i++)if(!(((parseFloat(x[i].value)) && (parseFloat(y[i].value))) || ((parseFloat(x[i].value)==0) || (parseFloat(y[i].value)==0))))
+	 { flag = false; alert("One of the vales is invalid."); break;}
+
+	if(!layer_1_neuron)layer_1_neuron=1;
+	if(!layer_2_neuron)layer_2_neuron=1;
+	if(!no_of_epochs)no_of_epochs=500;
+	if(!learning_rate)learning_rate=0.001;
+
+	var lr = learning_rate;
+	var optimizers;
+	var losses;
+
+	switch(optimizer_select){
+		
+		case 0: optimizers = tf.train.sgd(lr); break;
+		case 1: optimizers = tf.train.momentum(lr, 0.9); break;
+		case 2: optimizers = tf.train.adagrad(lr); break;
+		case 3: optimizers = tf.train.adadelta(lr); break;
+		case 4: optimizers = tf.train.adam(lr); break;
+		case 5: optimizers = tf.train.adamax(lr); break;
+		case 6: optimizers = tf.train.rmsprop(lr); break;
+		default: optimizers = tf.train.sgd(lr); break;
+
+	}
+
+	switch(loss_function){
+		
+		case 0: losses = tf.losses.meanSquaredError; break;
+		case 1: losses = tf.losses.absoluteDifference; break;
+		case 2: losses = tf.losses.computeWeightedLoss; break;
+		case 3: losses = tf.losses.cosineDistance; break;
+		case 4: losses = tf.losses.hingeLoss; break;
+		case 5: losses = tf.losses.huberLoss; break;
+		case 6: losses = tf.losses.logLoss; break;
+
+		default: losses = tf.losses.meanSquaredError; break;
+
+	}
+
+
+var xs = await tf.tensor2d([parseFloat(x[0].value),parseFloat(x[1].value),parseFloat(x[2].value),parseFloat(x[3].value),parseFloat(x[4].value),parseFloat(x[5].value)],[6,1]);
+var ys = await tf.tensor2d([parseFloat(y[0].value), parseFloat(y[1].value),parseFloat(y[2].value),parseFloat(y[3].value),parseFloat(y[4].value),parseFloat(y[5].value)],[6,1]);
+
+		if(firstRun)initializeModel(layer_1_neuron, layer_2_neuron, losses, optimizers);
+
+
+
+		if(flag)doTraining(no_of_epochs, xs, ys);
+
+
+
         			});
+
+
+
 		predict.addEventListener("click", async function(){
+
+
 			var test_value = document.getElementById("test_value");
-			test_value = test_value.value; //to store the value of x who's y we want to predict 
+			test_value = test_value.value;
 			var a = model.predict(tf.tensor2d([parseFloat(test_value)], [1, 1]));
 			console.log(test_value);
 			alert(a.dataSync());
-			// create prediction function here
+
+
+
 		});
-	</script>
+</script>
