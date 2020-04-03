@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Y Predictor</title>
@@ -5,7 +6,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700" rel="stylesheet">
 <style>
-	h1 {text-align: center;}
 	.jumbotron {
   		background: #ffd89b;
 		background: -webkit-linear-gradient(to left, #19547b, #ffd89b);  /* Chrome 10-25, Safari 5.1-6 */
@@ -51,13 +51,29 @@
 </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-@@ -30,58 +74,78 @@
+<script lang="js">
+	let xs;
+	let ys;
+        async function doTraining(){
+            const history = await model.fit(xs, ys, {
+            	epochs: 500, callbacks: {
+            		onEpochEnd: async(epoch, logs) => {
+            			console.log("Epochs:" + epoch + "Loss:" + logs.loss);
+				document.getElementById("progress").innerHTML = epoch+"/499";
+            		}
+            	}
+            }
+            );
+            alert("Training is Complete. You can now predict Y");
+        }
+        const model = tf.sequential();
+        model.add(tf.layers.dense({units: 15, inputShape: [1]}));
+        model.add(tf.layers.dense({units: 10}));
+        model.add(tf.layers.dense({units: 1,activation: 'linear'}));
+        model.compile({loss:'meanSquaredError', optimizer: 'sgd'});
     </script>
 
 <body>
-	<h1>Basic Machine Learning Model</h1>
-	<h3>What does it do?</h3>
-	<p>
 	<div class="container-fluid p-0">
 			<div class="jumbotron mt-0">
 				<h1 id="head" class="display-4">Basic Machine <br> Learning Model</h1>
@@ -68,44 +84,12 @@
 		<p>
 		Considering an equation, this application will take input 6 x values(independant variable) and 6 y values(dependant variable) from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
 		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
-	</p>
 		</p>
 
-	<h3>
 		<h3>
 		Enter the values: Please try to provide as much variety as you can...
-	</h3>
 		</h3>
 
-	<h5>
-		Please dont't leave any cell in the table blank and go to the prediction once a <strong>"Training is Complete"</strong> message pops up.
-	</h5>
-	This will only be able to predict linear relations.<br>
-	The answer will never be accurate,but close to the real answer.<br>
-	<table border="1">
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x1"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y1"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x2"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y2"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x3"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y3"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x4"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y4"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x5"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y5"></td>
-		</tr>
-		<tr>
-			<td><input type="text" name="" class="x" placeholder="Enter x6"></td>
-			<td><input type="text" name="" class="y" placeholder="Enter y6"></td>
 		<h5>
 		Please don't leave any cell in the table blank and go to the prediction once a <strong>"Training is Complete"</strong> message pops up.
 		</h5>
@@ -116,7 +100,7 @@
 		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
 		</p>
 	</section>
-
+	
 	<section class="container-fluid">
 		<table border="1">
 			<tr>
@@ -147,17 +131,6 @@
 				<td><input type="text" name="" class="x" placeholder="Enter x6"></td>
 				<td><input type="text" name="" class="y" placeholder="Enter y6"></td>
 		</tr>
-	</table>
-	<p></p>
-	<button id="train">Train</button>
-	<div id="progress"></div>
-	<p>Enter x who's y you want to predict.</p>
-	<input type="text" name="" placeholder="Enter x" id="test_value">
-	<p></p>
-	<button id="predict">Predict</button>
-	<h5>Open the console(pressing F12 and clicking the console tab) in the inspect page if you want to see the training process...</h5>
-	<h4><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h4>
-</body>
 		</table>
 		<p></p>
 		<button id="train" class="btn btn-light">Train</button>
@@ -176,13 +149,12 @@
 </html>
 <script>
 		var train = document.getElementById("train");
-@@ -91,18 +155,16 @@ <h4><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></
+		var predict = document.getElementById("predict");
+
+		train.addEventListener("click", async function() {
 			var x = await document.getElementsByClassName("x"); 
 			var y = await document.getElementsByClassName("y");
 			// create training function here
-xs = await tf.tensor2d([parseFloat(x[0].value), parseFloat(x[1].value), parseFloat(x[2].value), parseFloat(x[3].value), parseFloat(x[4].value), parseFloat(x[5].value)],[6, 1]);
-ys = await tf.tensor2d([parseFloat(y[0].value), parseFloat(y[1].value), parseFloat(y[2].value), parseFloat(y[3].value), parseFloat(y[4].value), parseFloat(y[5].value)],[6, 1]);
-doTraining();
 		xs = await tf.tensor2d([parseFloat(x[0].value), parseFloat(x[1].value), parseFloat(x[2].value), parseFloat(x[3].value), parseFloat(x[4].value), parseFloat(x[5].value)],[6, 1]);
 		ys = await tf.tensor2d([parseFloat(y[0].value), parseFloat(y[1].value), parseFloat(y[2].value), parseFloat(y[3].value), parseFloat(y[4].value), parseFloat(y[5].value)],[6, 1]);
 		doTraining();
@@ -193,8 +165,6 @@ doTraining();
 			var a = model.predict(tf.tensor2d([parseFloat(test_value)], [1, 1]));
 			console.log(test_value);
 			alert(a.dataSync());
-
-
 			// create prediction function here
 		});
 	</script>
