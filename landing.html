@@ -60,6 +60,7 @@
             	epochs: 500, callbacks: {
             		onEpochEnd: async(epoch, logs) => {
             			console.log("Epochs:" + epoch + "Loss:" + logs.loss);
+				document.getElementById("progress").innerHTML = epoch+"/499";
             		}
             	}
             }
@@ -67,7 +68,9 @@
             alert("Training is Complete. You can now predict Y");
         }
         const model = tf.sequential();
-        model.add(tf.layers.dense({units: 1, inputShape: [1]}));
+        model.add(tf.layers.dense({units: 15, inputShape: [1]}));
+        model.add(tf.layers.dense({units: 10}));
+        model.add(tf.layers.dense({units: 1,activation: 'linear'}));
         model.compile({loss:'meanSquaredError', optimizer: 'sgd'});
     </script>
 
@@ -132,6 +135,7 @@
 		</table>
 		<p></p>
 		<button id="train" class="btn btn-light">Train</button>
+		<div id="progress"></div>
 		<p></p>
 		<h5>Enter x who's y you want to predict:</h5>
 		<input type="text" name="" placeholder="Enter x" id="test_value">
