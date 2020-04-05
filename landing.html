@@ -62,7 +62,7 @@
 		<h3>What does it do?</h3>
 		<p>
 		Considering an equation, this application will take input 6 x values(independant variable) and 6 y values(dependant variable) from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
-		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
+		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you.
 		</p>
 
 		<h3>
@@ -76,12 +76,12 @@
 		The answer will never be accurate,but close to the real answer.<br>
 		<p>
 		Considering an equation, this application will take input 6 x values(independant variable) and 6 y values(dependant variable) from you and run 500 epochs over a single neuron <br> and will try to learn the realtionship between them. <br>
-		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you. 
+		The Model without knowing the exact equation will try to predict the answer of an unknown x given by you.
 		</p>
 
 		<h6>IF NAN IS RETURNED, OUR MODEL WAS NOT ABLE TO TRAIN CORRECTLY TO YOUR VALUES</h6>
 	</section>
-	
+
 	<section class="container-fluid">
 		<table border="1">
 			<tr>
@@ -151,13 +151,14 @@
                 <option value="5">adamax</option>
                 <option value="6">RMSProp</option>
 			</select>
-			
+
 			<br>
 			<input type="text" id="lr" placeholder="Learning Rate">
 		</p>
 		<button id="train" class="btn btn-light">Train</button>
 		<p></p>
 		<div id="progress"></div>
+		<div id="current_loss"></div>
 		<p></p>
 		<label for="train_progress">Training progress:</label>
 		<progress id="train_progress" value="" max=""></progress>
@@ -167,12 +168,12 @@
 		<button id="predict" class="btn btn-light">Predict</button>
 		<P></P>
 		<h5>Open the console(pressing F12 and clicking the console tab) in the inspect page if you want to see the training process...</h5>
-		<h4><a = href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h4>
+		<h4><a href="https://github.com/FranciscanLads">Made By Franciscan Lads.</a></h4>
 	</section>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-</body>	
+</body>
 </html>
 <script>
 
@@ -186,7 +187,8 @@
             	epochs: EPOCHS, callbacks: {
             		onEpochEnd: async(epoch, logs) => {
             			console.log("Epochs:" + epoch + "Loss: " + logs.loss + ' Accuracy: ', parseFloat(logs.acc));
-				document.getElementById("progress").innerHTML = (epoch+1)+" / "+EPOCHS;
+				document.getElementById("progress").innerHTML = "Epochs: "+(epoch+1)+" / "+EPOCHS;
+				document.getElementById("current_loss").innerHTML = "Loss: "+logs.loss;
 				document.getElementById("train_progress").value = epoch+1;
 
             		}
@@ -220,7 +222,7 @@ train.addEventListener("click", async function() {
 
 	//GETTING USERS INPUTS
 
-	var x = await document.getElementsByClassName("x"); 
+	var x = await document.getElementsByClassName("x");
 	var y = await document.getElementsByClassName("y");
 	var layer_1_neuron =parseInt(document.getElementById("layer1").value);
 	var layer_2_neuron =parseInt(document.getElementById("layer2").value);
@@ -233,7 +235,8 @@ train.addEventListener("click", async function() {
 
 
 	for(var i = 0; i<6; i++)if(!(((parseFloat(x[i].value)) && (parseFloat(y[i].value))) || ((parseFloat(x[i].value)==0) || (parseFloat(y[i].value)==0))))
-	 { flag = false; alert("One of the vales is invalid."); break;}
+	 { flag = false; alert("Please fill in all the values before training!"+"\n"+"All the values should be numbers.");  break;}
+	 else{flag = true}
 
 	if(!layer_1_neuron)layer_1_neuron=1;
 	if(!layer_2_neuron)layer_2_neuron=1;
@@ -245,7 +248,7 @@ train.addEventListener("click", async function() {
 	var losses;
 
 	switch(optimizer_select){
-		
+
 		case 0: optimizers = tf.train.sgd(lr); break;
 		case 1: optimizers = tf.train.momentum(lr, 0.9); break;
 		case 2: optimizers = tf.train.adagrad(lr); break;
@@ -258,7 +261,7 @@ train.addEventListener("click", async function() {
 	}
 
 	switch(loss_function){
-		
+
 		case 0: losses = tf.losses.meanSquaredError; break;
 		case 1: losses = tf.losses.absoluteDifference; break;
 		case 2: losses = tf.losses.computeWeightedLoss; break;
