@@ -1,0 +1,41 @@
+.jumbotron {
+	background: #ffd89b;
+	background: -webkit-linear-gradient(to left, #19547b, #ffd89b);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to left, #19547b, #ffd89b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+h1{
+	color: white;
+}
+body{
+	background: #eef2f3;
+}
+h3{
+	color: #19547b;
+	font-family: "Nunito", sans-serif;
+}
+h5{
+	color: #19547b;
+	font-family: "Nunito", sans-serif;
+}
+a{
+	color: #19547b;
+}
+input{
+	background-color: #f7f7f7;
+	margin: 0;
+ 	padding: 0;
+   	color: #19547b;
+}
+th{
+	background-color: #19547b;
+	color: white;
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+	text-align: center;
+}
+.btn {
+	background-color: #19547b;
+	color: white;
+	font-family: 'Oswald', sans-serif;
+	font-weight: 400;
+}
